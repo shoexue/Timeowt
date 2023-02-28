@@ -7,33 +7,22 @@
 <html>
   <head>
     <link rel="manifest" crossorigin="use-credentials" href="%PUBLIC_URL%/manifest.json" />
-    <title>Getting Started Extension's Popup</title>
-    <style>
-      body {
-        font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
-        font-size: 100%;
-      }
-      #status {
-        
-        white-space: pre;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        max-width: 400px;
-      }
-    </style>
-
-    <!--
-      - JavaScript and HTML must be in separate files: see our Content Security
-      - Policy documentation[1] for details and explanation.
-      -
-      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
-     -->
+    <link rel="stylesheet" href="popup.css">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <title>TimeMeowt Extension</title>
     <script src="popup.js"></script>
   </head>   
   <body>
-    <h1> Click it.</h1>
-    <button id="clickIt"> click</button>
-    <div id="status"></div>
-    <img id="image-result" hidden>
+    <div class="Heading">
+      <h1>It's Time to Stop!</h1>
+    </div>
+    <h2> Activate Extension </h2>
+    <!-- <button id="clickIt"> click</button> -->
+
+    <label class="switch">
+      <input type="checkbox" name="extensiontoggle" id="extonoff" >
+      <span class="slider round"></span>"
+    </label>
+
   </body>
 </html>
