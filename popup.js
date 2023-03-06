@@ -9,6 +9,20 @@ document.addEventListener("DOMContentLoaded",
             alert('bye');
         }
     });
+
+    
+    for (let i=0; i<1; i++){
+        var id = ['youtube','instagram','tiktok','other'];
+        var checkCheckbox = document.getElementById('tiktok');
+        
+        checkCheckbox.addEventListener('change',function(){
+            if (checkCheckbox.checked){
+                alert('yes');
+            }else{
+                
+            }
+        });
+    }
 }, false);
 
     // var checkPageButton = document.getElementById('clickIt');

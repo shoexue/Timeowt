@@ -11,7 +11,7 @@
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
     <title>TimeMeowt Extension</title>
     <script src="popup.js"></script>
-  </head>   
+  </head>  
   <body>
     <div class="Heading">
       <h1>It's Time to Stop!</h1>
@@ -19,10 +19,30 @@
     <h2> Activate Extension </h2>
     <!-- <button id="clickIt"> click</button> -->
 
-    <label class="switch">
-      <input type="checkbox" name="extensiontoggle" id="extonoff" >
-      <span class="slider round"></span>"
-    </label>
+    <div class="extensionctrl">
+      <label class="switch">
+        <input type="checkbox" name="extensiontoggle" id="extonoff" >
+        <span class="slider round"></span>"
+      </label>
+    </div>
+  
+    <h2> Quick Settings </h2>
+    <div class="choosesite">
+      <input type="checkbox" name="youtube" id="youtube" >
+      <label for="youtube">Youtube</label>
+    </div>
+    <div class="choosesite">
+      <input type="checkbox" name="instagram" id="instagram" >
+      <label for="instagram">Instagram</label>
+    </div>
+    <div class="choosesite">
+      <input type="checkbox" name="tiktok" id="tiktok" >
+      <label for="tiktok">Tiktok</label>
+    </div>
+    <div class="choosesite">
+      <label for="other">Other: </label>
+      <input type="text" name="other" id="other" > 
+    </div>
 
   </body>
 </html>

@@ -1,27 +1,41 @@
+html{
+    width: 300px;
+    height:300px;
+    padding:0;
+    background-color:white;
+}
 body {
+    margin: 0;
     font-family: "Poppins", "Lucida Grande", Tahoma, sans-serif;
     width: 300px;
-    padding: 20px;
 }
 
 h1 {
     font-size: 20px;
+    padding: 10px;
     color: white   
 }
 
 h2 {
     font-size: 16px;
+    padding-left: 20px;
+    padding-top: 15px;
     color:#FF635B
 }
 
 .Heading {
-    border: 5px;
-    border-radius: 20px;
-    padding: 20px;
     background-color: #FF635B;
+    overflow: hidden;
     text-align: center;
-  }
+}
 
+.extensionctrl{
+    padding-left: 20px;
+}
+
+.choosesite{
+    padding-left: 20px;
+}
 #status {
     white-space: pre;
     text-overflow: ellipsis;
@@ -87,3 +101,6 @@ input:checked + .slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
+
+
+
