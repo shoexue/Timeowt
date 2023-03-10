@@ -2,14 +2,20 @@
     "manifest_version": 3,
   
     "name": "Python Chrome Plugin",
-    "description": "This extension runs Python code.",
+    "description": "TimeMeowt Study Chrome Extension.",
     "version": "1.0",
+    "background": {
+      "service_worker": "background.js"
+    },
   
     "action": {
       "default_icon": "icon.png",
       "default_popup": "popup.html"
     },
     "permissions": [
-      "activeTab"
+      "activeTab",
+      "alarms",
+      "scripting",
+      "tabs"
     ]
   }

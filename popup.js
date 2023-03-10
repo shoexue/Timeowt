@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded",
 
     checkToggleswitch.addEventListener('change',function(){
         if (checkToggleswitch.checked){
-            alert('hi');
+            alert(currentURL);
         }else{
             alert('bye');
         }
@@ -24,6 +24,8 @@ document.addEventListener("DOMContentLoaded",
         });
     }
 }, false);
+
+
 
     // var checkPageButton = document.getElementById('clickIt');
     // checkPageButton.addEventListener('click', function(){
