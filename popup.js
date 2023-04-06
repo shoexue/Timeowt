@@ -1,32 +1,54 @@
+// chrome.runtime.getBackgroundPage(function(backgroundPage) {
+//     console = backgroundPage.console;
+//   })
+
+// function activateBackground() {
+//     chrome.runtime.sendMessage({action: "activate"});
+//   }
+
+// document.getElementById("checkbox").addEventListener("change", function() {
+//     if (this.checked) {
+//       chrome.runtime.sendMessage({activateBackgroundJS: true});
+//     } else {
+//       chrome.runtime.sendMessage({activateBackgroundJS: false});
+//     }
+//   });
+
+//Event DOMContentLoaded fires when initial HTML document has been completely loaded and parsed
 document.addEventListener("DOMContentLoaded", 
     function(){
     var checkToggleswitch = document.getElementById('extonoff')
 
     checkToggleswitch.addEventListener('change',function(){
         if (checkToggleswitch.checked){
-            alert(currentURL);
+            chrome.runtime.sendMessage({activateBackgroundJS: true});
         }else{
-            alert('bye');
+            chrome.runtime.sendMessage({activateBackgroundJS: false});
         }
     });
 
     
-    for (let i=0; i<1; i++){
-        var id = ['youtube','instagram','tiktok','other'];
-        var checkCheckbox = document.getElementById('tiktok');
-        
-        checkCheckbox.addEventListener('change',function(){
-            if (checkCheckbox.checked){
-                alert('yes');
-            }else{
-                
-            }
-        });
+    // if (document.getElementById('instagram').checked == true) {
+    //     console.log("instagram check");
+    // }
+    // var id = ['youtube','instagram','tiktok','other'];
+    // var checkTiktok = document.getElementById('tiktok');
+    
+    // checkTiktok.addEventListener('change',function(){
+    //     if (checkTiktok.checked){
+    //         console.log("tiktok");
+    //     }
+    // });
+    
+});
+
+
+function checkClickFunc(){
+    var checkbox = document.getElementById('instagram');
+    if (checkbox.checked == true){
+        alert("Checkbox is clicked");
     }
-}, false);
-
-
-
+}
     // var checkPageButton = document.getElementById('clickIt');
     // checkPageButton.addEventListener('click', function(){
 
