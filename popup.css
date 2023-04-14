@@ -1,41 +1,41 @@
-html{
-    width: 300px;
-    height:300px;
-    padding:0;
-    background-color:white;
-}
+/* Body */
 body {
-    margin: 0;
+    font-size: 1.5vw;
     font-family: "Poppins", "Lucida Grande", Tahoma, sans-serif;
     width: 300px;
+    padding: 20px;
+    text-align: center;
 }
 
+.websitebody {
+    width: 97vw;
+    padding: 10px;
+}
+
+/* Headings */
 h1 {
     font-size: 20px;
-    padding: 10px;
     color: white   
 }
 
+.websiteh1 {
+    font-size: 4.5vw;
+}
+
 h2 {
-    font-size: 16px;
-    padding-left: 20px;
-    padding-top: 15px;
+    font-size: 4vw;
     color:#FF635B
 }
 
 .Heading {
+    border: 5px;
+    border-radius: 20px;
+    padding: 20px;
     background-color: #FF635B;
-    overflow: hidden;
     text-align: center;
-}
+  }
 
-.extensionctrl{
-    padding-left: 20px;
-}
-
-.choosesite{
-    padding-left: 20px;
-}
+/*Sliders*/
 #status {
     white-space: pre;
     text-overflow: ellipsis;
@@ -79,6 +79,16 @@ h2 {
     transition: .4s;
 }
 
+/*Sliders - rounded*/
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* Slider - checking */
 input:checked + .slider {
     background-color: #FF635B;
 }
@@ -97,10 +107,36 @@ input:checked + .slider:before {
 .slider.round {
     border-radius: 34px;
 }
+/* Button */
+button {
+    border: none;
+    border-radius: 1vw;
+    background-color: #FF635B;
+    padding: 1vw 1.5vw;
+    font-size: 2vw;
+    cursor: pointer;
+    display: inline-block;
+  }
+  
+  .button:hover {background: #ccc;}
+  .general {color: #ffffff;}
+  .submit {
+    color: #ffffff;
+    background-color: #ccc;
+}
 
 .slider.round:before {
     border-radius: 50%;
 }
+/* Links */
+a:link {
+    color: #FF635B;
+  }
+a:visited {
+    color: #ccc;
+  }
 
-
-
+/* Logo */
+img {
+    max-width: 60%;
+}

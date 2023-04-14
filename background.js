@@ -26,7 +26,7 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
             chrome.tabs.query({'active': true, 'lastFocusedWindow': true, 'currentWindow': true}, function (tabs) {
                 var url = tabs[0].url;
                 console.log(url);
-                var redirect = chrome.runtime.getURL("new.html") + '?url=' + encodeURIComponent(url)
+                var redirect = chrome.runtime.getURL("redirect.html") + '?url=' + encodeURIComponent(url)
 
                 if (url.includes("instagram.com")){
                     chrome.tabs.update(url.id, {url: redirect});
@@ -47,9 +47,9 @@ chrome.tabs.onUpdated.addListener((tabId, tab) => {
             if (tab.url && tab.url.includes("instagram")){
                 console.log("check",tab.url)
 
-                var redirect = chrome.runtime.getURL("new.html") + '?url=' + encodeURIComponent(tab.url)
+                var redirect = chrome.runtime.getURL("redirect.html") + '?url=' + encodeURIComponent(tab.url)
                 
-                if (!tab.url.includes("new.html?url=chrome-extension")){
+                if (!tab.url.includes("redirect.html?url=chrome-extension")){
                     chrome.tabs.update(tabId, {url: redirect});
                     redirect = "";
                 }
