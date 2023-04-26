@@ -2,6 +2,9 @@
 document.addEventListener("DOMContentLoaded",
     function(){
     var checkToggleswitch = document.getElementById('extonoff')
+    var textinpt = document.getElementById('siteInpt')
+    var inptButton = document.getElementById('inptButton')
+    // var checkInst = document.getElementById('instagram')
 
 
     //check local storage to see if extension was last turned on or off
@@ -12,6 +15,13 @@ document.addEventListener("DOMContentLoaded",
         }
     });
 
+    // chrome.storage.local.get(["instOn"], (result) => {
+    //     if (result.instOn==true){
+    //         //if extension is on, show toggle switch as "on" (checked) in popup
+    //         document.getElementById("instagram").checked = true;
+    //     }
+    // });
+
 
     //check for change in toggle switch state, if on activate background script, if not don't
     checkToggleswitch.addEventListener('change',function(){
@@ -21,16 +31,19 @@ document.addEventListener("DOMContentLoaded",
             chrome.runtime.sendMessage({activateBackgroundJS: false});
         }
     });
+    
+    inptButton.addEventListener('click',function(){
+        //alert(textinpt.value);
+        chrome.runtime.sendMessage({newEntry: textinpt.value})
+        //chrome.runtime.sendMessage({entryText: textinpt.value});
+    });
    
+    // checkInst.addEventListener('change',function(){
+    //     if (checkInst.checked){
+    //         chrome.runtime.sendMessage({inst: true});
+    //     }else{
+    //         chrome.runtime.sendMessage({inst: false});
+    //     }
+    // });
+
 });
-
-
-
-
-//ignore
-function checkClickFunc(){
-    var checkbox = document.getElementById('instagram');
-    if (checkbox.checked == true){
-        alert("Checkbox is clicked");
-    }
-}
