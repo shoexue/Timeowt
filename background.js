@@ -113,3 +113,41 @@ chrome.tabs.onUpdated.addListener((tabId, tab) => {
     
 });
 
+
+async function getCurrentTab() {
+    let queryOptions = { active: true, lastFocusedWindow: true };
+    // `tab` will either be a `tabs.Tab` instance or `undefined`.
+    let [tab] = await chrome.tabs.query(queryOptions);
+    console.log(tab)
+    return tab;
+  }
+    //     console.log(tab)
+
+// chrome.tabs.onActivated.addListener((tab)=>{
+//     console.log(tab)
+//     setTimeout(() => {
+//         chrome.tabs.query({
+//             active: true,
+//             currentWindow: true,
+//         }, function(tab){
+//             var currentURL = tab[0].url;
+//             if (currentURL.includes("instagram")){
+//                 console.log("unproductive tab true")
+//                 chrome.tabs.remove(tab[0].id, function() { });
+//                 chrome.tabs.create({
+//                     url: "https://kognity.com/"
+//                 })
+//             }
+//         })
+//      }, 100);   
+// })
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// chrome.tabs.get(tab.tabID, (currentTabData) => {
+//     if (currentTabData.url.includes("youtube")){
+//         console.log("true")
+//     }
+// })
