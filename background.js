@@ -1,3 +1,5 @@
+//var blocklist = []
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.activateBackgroundJS) {
         console.log("extension on");
@@ -5,14 +7,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         chrome.storage.local.set({ extOn: true }).then(() => {
             console.log("Value is set to " + true);
           });
-    // } else if(request.inst){
-    //     chrome.storage.local.set({ instOn: true }).then(() => {
-    //         console.log("inst checked")
-    //       });
-    // }else if(request.inst==false){
-    //     chrome.storage.local.set({ instOn: false }).then(() => {
-    //         console.log("inst unchecked")
-    //       });
     } else {
         console.log("extension off");
         //if request is to deactivate background, store local data that the extension is off
@@ -22,6 +16,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     }
     if (request.newEntry){
         console.log("enter clicked")
+        //blocklist.push(request.newEntry)
+        //chrome.storage.local.set({entryText: blocklist})
         chrome.storage.local.set({entryText: request.newEntry})
         console.log(request.newEntry)
     }
@@ -33,121 +29,54 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
     chrome.storage.local.get(["extOn"], (result) =>{
         console.log("Value currently is " + result.extOn);
 
-        if (result.extOn==true){
-            console.log("confirmed");
+        chrome.storage.local.get(["entryText"], (result2) =>{
+            console.log(result2.entryText) 
 
-            chrome.tabs.query({'active': true, 'lastFocusedWindow': true, 'currentWindow': true}, function (tabs) {
-                var url = tabs[0].url;
-                console.log(url);
-                var redirect = chrome.runtime.getURL("redirect.html") + '?url=' + encodeURIComponent(url)
-                fetch('blocklist.json')
-                .then(res => res.json()) // the .json() method parses the JSON response into a JS object literal
-                .then(data => showInfo(data));
-               
-                function showInfo(data){
-                    console.log(Object.keys(data));
-                    console.log("lenth"+Object.keys(data).length)
-                    for (let i =0; i < Object.keys(data).length; i++) {
-                        if (url.includes(data[i])){
+            if (result.extOn==true){
+                chrome.tabs.query({'active': true, 'lastFocusedWindow': true, 'currentWindow': true}, function (tabs) {
+                    var url = tabs[0].url;
+                    console.log(url);
+                    var redirect = chrome.runtime.getURL("redirect.html") + '?url=' + encodeURIComponent(url)
+                
+                    for (let i =0; i < result2.entryText.length; i++) {
+                        if (url.includes(result2.entryText[i])){
                             chrome.tabs.update(url.id, {url: redirect});
                             redirect = "";
                         }
-                        console.log(data[i]+"data")
-
-
                     }
-                }
-
-                // if (url.includes("instagram.com")){
-                //     chrome.tabs.update(url.id, {url: redirect});
-                //     redirect = "";
                     
-                // }
-            });
-        }
+                });
+            }
+        });
+
+        
     });
     
 });
+
+
 chrome.tabs.onUpdated.addListener((tabId, tab) => {
     chrome.storage.local.get(["extOn"], (result) =>{
         console.log("Value currently is " + result.extOn);
         console.log("update",tab.url)
-        if (result.extOn==true){
 
-            fetch("blocklist.json")
-            .then((response) => response.json())
-            .then((data) => showInfo(data));
-       
-             function showInfo(data){
-                console.log(data +"data")
-                 blocklist = data
-                 console.log(data["website"] + "blocked lists")
-                 console.log(data.length)
-                 for (var i = 0; i < Object.keys(data).length; i++){
-                    if (tab.url.includes(data[i])){
+        chrome.storage.local.get(["entryText"], (result2) =>{
+            console.log(result2.entryText)
+
+            if (result.extOn==true){
+                for (var i = 0; i < result2.entryText.length; i++){
+                    if (tab.url.includes(result2.entryText[i])){
                         var redirect = chrome.runtime.getURL("redirect.html") + '?url=' + encodeURIComponent(tab.url)
-                   
+                
                         if (!tab.url.includes("redirect.html?url=chrome-extension")){
-                          chrome.tabs.update(tabId, {url: redirect});
-                         redirect = "";
-                      }
+                        chrome.tabs.update(tabId, {url: redirect});
+                        redirect = "";
                     }
-   
-                 }
-             }
-            // if (tab.url && tab.url.includes("instagram")){
-            //     console.log("check",tab.url)
+                    }
 
-            //     var redirect = chrome.runtime.getURL("redirect.html") + '?url=' + encodeURIComponent(tab.url)
-                
-            //     if (!tab.url.includes("redirect.html?url=chrome-extension")){
-            //         chrome.tabs.update(tabId, {url: redirect});
-            //         redirect = "";
-            //     }
-
-
-                
-            // }
-        }
+                }
+            }
+        });
     });
     
 });
-
-
-async function getCurrentTab() {
-    let queryOptions = { active: true, lastFocusedWindow: true };
-    // `tab` will either be a `tabs.Tab` instance or `undefined`.
-    let [tab] = await chrome.tabs.query(queryOptions);
-    console.log(tab)
-    return tab;
-  }
-    //     console.log(tab)
-
-// chrome.tabs.onActivated.addListener((tab)=>{
-//     console.log(tab)
-//     setTimeout(() => {
-//         chrome.tabs.query({
-//             active: true,
-//             currentWindow: true,
-//         }, function(tab){
-//             var currentURL = tab[0].url;
-//             if (currentURL.includes("instagram")){
-//                 console.log("unproductive tab true")
-//                 chrome.tabs.remove(tab[0].id, function() { });
-//                 chrome.tabs.create({
-//                     url: "https://kognity.com/"
-//                 })
-//             }
-//         })
-//      }, 100);   
-// })
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-// chrome.tabs.get(tab.tabID, (currentTabData) => {
-//     if (currentTabData.url.includes("youtube")){
-//         console.log("true")
-//     }
-// })

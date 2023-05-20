@@ -4,6 +4,9 @@ document.addEventListener("DOMContentLoaded",
     var checkToggleswitch = document.getElementById('extonoff')
     var textinpt = document.getElementById('siteInpt')
     var inptButton = document.getElementById('inptButton')
+    // Get a reference to the button container div
+    var buttonContainer = document.getElementById("buttonContainer");
+    
     // var checkInst = document.getElementById('instagram')
 
 
@@ -15,12 +18,32 @@ document.addEventListener("DOMContentLoaded",
         }
     });
 
-    // chrome.storage.local.get(["instOn"], (result) => {
-    //     if (result.instOn==true){
-    //         //if extension is on, show toggle switch as "on" (checked) in popup
-    //         document.getElementById("instagram").checked = true;
-    //     }
-    // });
+    chrome.storage.local.get(["entryText"], (result) => {
+        blocklist = result.entryText
+        // Generate the buttons using a for loop
+        for (var i = 0; i < blocklist.length; i++) {
+            // Create a new button element
+            var button = document.createElement("button");
+
+            // Set the button's text
+            button.innerHTML = blocklist[i];
+            button.className = "button";
+            button.onclick = function(label) {
+                return function() {
+                    buttonContainer.removeChild(this);
+                    blocklist.pull(i);
+
+                // Do something else when the button is clicked
+                };
+            }(blocklist[i]);
+
+            // Append the button to the button container
+            buttonContainer.appendChild(button);
+        }
+    });
+
+    
+    
 
 
     //check for change in toggle switch state, if on activate background script, if not don't
@@ -32,18 +55,14 @@ document.addEventListener("DOMContentLoaded",
         }
     });
     
+    //check for button click (submitting new site url to be blocked)
     inptButton.addEventListener('click',function(){
         //alert(textinpt.value);
-        chrome.runtime.sendMessage({newEntry: textinpt.value})
-        //chrome.runtime.sendMessage({entryText: textinpt.value});
+        blocklist.push(textinpt.value)
+        //chrome.runtime.sendMessage({newEntry: textinpt.value})
+        chrome.runtime.sendMessage({newEntry: blocklist});
+    
+        
     });
-   
-    // checkInst.addEventListener('change',function(){
-    //     if (checkInst.checked){
-    //         chrome.runtime.sendMessage({inst: true});
-    //     }else{
-    //         chrome.runtime.sendMessage({inst: false});
-    //     }
-    // });
 
 });
