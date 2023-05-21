@@ -58,11 +58,13 @@ document.addEventListener("DOMContentLoaded",
     
     //check for submit button click (submitting new site url to be blocked)
     inptButton.addEventListener('click',function(){
-        //add new entry to list of blocked sites
-        blocklist.push(textinpt.value)
+        chrome.storage.local.get(["entryText"], (result) => {
+            blocklist = result.entryText
+            //add new entry to list of blocked sites
+            blocklist.push(textinpt.value)
+            chrome.runtime.sendMessage({newEntry: blocklist});
+        });
         //chrome.runtime.sendMessage({newEntry: textinpt.value})
-        chrome.runtime.sendMessage({newEntry: blocklist});
-    
         
     });
 
