@@ -1,5 +1,3 @@
-//var blocklist = []
-
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     
     if (request.activateBackgroundJS) {
@@ -15,6 +13,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             console.log("Value is set to " + false);
           });
     }
+
+    //if request is to add a new entry to the list of blocked sites, store list with new entry in local storage
     if (request.newEntry){
         console.log("enter clicked")
         //blocklist.push(request.newEntry)
@@ -22,15 +22,18 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         chrome.storage.local.set({entryText: request.newEntry})
         console.log(request.newEntry)
     }
+
+    //if request is to delete an entry from list of blocked sites
     if (request.deleteEntry){
         console.log("entry deleted")
-        console.log(request.deleteEntry)
-        
+
+        //get current blocklist from local storage
         chrome.storage.local.get(["entryText"], (result) => {
             //get index of blocklist item that is to be deleted
             const delIndex = result.entryText.indexOf(request.deleteEntry)
             
             if (delIndex > -1) { // only splice array when item is found
+                //splice array and store new list in storage
                 result.entryText.splice(delIndex, 1);
                 chrome.storage.local.set({entryText: result.entryText})
                 console.log(result.entryText)
@@ -41,14 +44,18 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 });
 
 
+//On switching to a different tab
 chrome.tabs.onActivated.addListener((activeInfo) => {
 
+    //Check to see if extension is on
     chrome.storage.local.get(["extOn"], (result) =>{
         console.log("Value currently is " + result.extOn);
 
+        //Get list of sites to be blocked
         chrome.storage.local.get(["entryText"], (result2) =>{
             console.log(result2.entryText) 
 
+            //If extension on
             if (result.extOn==true){
                 chrome.tabs.query({'active': true, 'lastFocusedWindow': true, 'currentWindow': true}, function (tabs) {
                     var url = tabs[0].url;
@@ -64,22 +71,23 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
                     
                 });
             }
-        });
-
-        
+        }); 
     });
-    
 });
 
-
+//On entering a new URL
 chrome.tabs.onUpdated.addListener((tabId, tab) => {
+
+    //Check to see if extension is on
     chrome.storage.local.get(["extOn"], (result) =>{
         console.log("Value currently is " + result.extOn);
         console.log("update",tab.url)
 
+        //Get list of sites to be blocked
         chrome.storage.local.get(["entryText"], (result2) =>{
             console.log(result2.entryText)
 
+            //If extension on
             if (result.extOn==true){
                 for (var i = 0; i < result2.entryText.length; i++){
                     if (tab.url.includes(result2.entryText[i])){
@@ -95,5 +103,4 @@ chrome.tabs.onUpdated.addListener((tabId, tab) => {
             }
         });
     });
-    
 });

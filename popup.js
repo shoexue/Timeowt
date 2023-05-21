@@ -1,15 +1,14 @@
 //Event DOMContentLoaded fires when initial HTML document has been completely loaded and parsed
 document.addEventListener("DOMContentLoaded",
     function(){
+    //Get references to elements on HTML (extension on/off toggle switch, blocklist site input form, form submit button)
     var checkToggleswitch = document.getElementById('extonoff')
     var textinpt = document.getElementById('siteInpt')
     var inptButton = document.getElementById('inptButton')
-    // Get a reference to the button container div
+    
+    //Get reference to button container div
     var buttonContainer = document.getElementById("buttonContainer");
     
-    // var checkInst = document.getElementById('instagram')
-
-
     //check local storage to see if extension was last turned on or off
     chrome.storage.local.get(["extOn"], (result) => {
         if (result.extOn==true){
@@ -18,24 +17,24 @@ document.addEventListener("DOMContentLoaded",
         }
     });
 
+    //get current list of blocked sites from local storage
     chrome.storage.local.get(["entryText"], (result) => {
         blocklist = result.entryText
-        //blocklist = JSON.parse(JSON.stringify(result.entryText))
-        // Generate the buttons using a for loop
+        
+        //Generate buttons with names of blocked sites
         for (var i = 0; i < blocklist.length; i++) {
-            // Create a new button element
+            //Create new button element
             var button = document.createElement("button");
 
-            // Set the button's text
+            //Set the button's text
             button.innerHTML = blocklist[i];
             button.className = "button";
             button.onclick = function(label) {
                 return function() {
-                    //alert(this.innerHTML);
+                    //on click, send message to background.js to delete site from blocklist + remove button interface from HTML container
                     chrome.runtime.sendMessage({deleteEntry:this.innerHTML});
                     buttonContainer.removeChild(this);
 
-                // Do something else when the button is clicked
                 };
             }(blocklist[i]);
             // button.addEventListener('click',function(){
@@ -43,16 +42,12 @@ document.addEventListener("DOMContentLoaded",
             //     chrome.runtime.sendMessage({deleteEntry:button.innerHTML});
             // })
 
-            // Append the button to the button container
+            //Append the button to the button container
             buttonContainer.appendChild(button);
         }
     });
 
-    
-    
-
-
-    //check for change in toggle switch state, if on activate background script, if not don't
+    //check for change in toggle switch state, if on, send message to activate background script, if not, don't
     checkToggleswitch.addEventListener('change',function(){
         if (checkToggleswitch.checked){
             chrome.runtime.sendMessage({activateBackgroundJS: true});
@@ -61,9 +56,9 @@ document.addEventListener("DOMContentLoaded",
         }
     });
     
-    //check for button click (submitting new site url to be blocked)
+    //check for submit button click (submitting new site url to be blocked)
     inptButton.addEventListener('click',function(){
-        //alert(textinpt.value);
+        //add new entry to list of blocked sites
         blocklist.push(textinpt.value)
         //chrome.runtime.sendMessage({newEntry: textinpt.value})
         chrome.runtime.sendMessage({newEntry: blocklist});
