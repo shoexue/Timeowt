@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded",
 
     chrome.storage.local.get(["entryText"], (result) => {
         blocklist = result.entryText
+        //blocklist = JSON.parse(JSON.stringify(result.entryText))
         // Generate the buttons using a for loop
         for (var i = 0; i < blocklist.length; i++) {
             // Create a new button element
@@ -30,12 +31,17 @@ document.addEventListener("DOMContentLoaded",
             button.className = "button";
             button.onclick = function(label) {
                 return function() {
+                    //alert(this.innerHTML);
+                    chrome.runtime.sendMessage({deleteEntry:this.innerHTML});
                     buttonContainer.removeChild(this);
-                    blocklist.pull(i);
 
                 // Do something else when the button is clicked
                 };
             }(blocklist[i]);
+            // button.addEventListener('click',function(){
+            //     alert(button.innerHTML);
+            //     chrome.runtime.sendMessage({deleteEntry:button.innerHTML});
+            // })
 
             // Append the button to the button container
             buttonContainer.appendChild(button);
