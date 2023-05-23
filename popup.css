@@ -1,6 +1,6 @@
 /* Body */
 body {
-    font-size: 5vw;
+    font-size: 5vmin;
     font-family: "Poppins", "Lucida Grande", Tahoma, sans-serif;
     width: 230px;
     padding: 3vw;
@@ -19,11 +19,11 @@ h1 {
 }
 
 .websiteh1 {
-    font-size: 4.5vw;
+    font-size: 4.5vmin;
 }
 
 h2 {
-    font-size: 5vw;
+    font-size: 5vmin;
     color:#FF635B
 }
 
@@ -114,7 +114,7 @@ button {
     color: #ffffff;
     background-color: #FF635B;
     padding: 3vw;
-    font-size: 3vw;
+    font-size: 3vmin;
     cursor: pointer;
     display: inline-block;
   }

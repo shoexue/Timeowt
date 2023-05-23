@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded",
     var checkToggleswitch = document.getElementById('extonoff')
     var textinpt = document.getElementById('siteInpt')
     var inptButton = document.getElementById('inptButton')
+    var blockButton = document.getElementById("blockthis");
     
     //Get reference to button container div
     var buttonContainer = document.getElementById("buttonContainer");
@@ -17,11 +18,60 @@ document.addEventListener("DOMContentLoaded",
         }
     });
 
-    //get current list of blocked sites from local storage
-    chrome.storage.local.get(["entryText"], (result) => {
+     //get current list of blocked sites from local storage and creates blocklist if not already existing 
+     chrome.storage.local.get(["entryText"], (result) => {
+        if (!result.entryText){
+            blocklist=[]
+            chrome.storage.local.set({"entryText":blocklist})
+        }
         blocklist = result.entryText
         
         //Generate buttons with names of blocked sites
+        generateButtons()
+    });
+
+    //check for change in toggle switch state, if on, send message to activate background script, if not, don't
+    checkToggleswitch.addEventListener('change',function(){
+        if (checkToggleswitch.checked){
+            chrome.runtime.sendMessage({activateBackgroundJS: true});
+        }else{
+            chrome.runtime.sendMessage({activateBackgroundJS: false});
+        }
+    });
+    
+    //check for submit button click (submitting new site url to be blocked)
+    inptButton.addEventListener('click',function(){
+        chrome.storage.local.get(["entryText"], (result) => {
+            blocklist = result.entryText
+            //add new entry to list of blocked sites
+            if(!blocklist.includes(textinpt.value)){
+                blocklist.push(textinpt.value)
+                chrome.runtime.sendMessage({newEntry: blocklist});
+            }  
+        });
+        //chrome.runtime.sendMessage({newEntry: textinpt.value})
+        
+    });
+
+    //Block this button adds current url to blocklist 
+    blockButton.addEventListener('click', function(){
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+            var url = tabs[0].url
+            if (!blocklist.includes(url)){
+                chrome.storage.local.get(["entryText"], (result) => {
+                    blocklist = result.entryText
+                    //add new entry to list of blocked sites
+                    blocklist.push(url)
+                    chrome.runtime.sendMessage({newEntry: blocklist});
+                    generateButtons()
+                });
+            }
+        })
+
+    })
+
+    function generateButtons(){
+        buttonContainer.innerHTML = "";
         for (var i = 0; i < blocklist.length; i++) {
             //Create new button element
             var button = document.createElement("button");
@@ -45,27 +95,5 @@ document.addEventListener("DOMContentLoaded",
             //Append the button to the button container
             buttonContainer.appendChild(button);
         }
-    });
-
-    //check for change in toggle switch state, if on, send message to activate background script, if not, don't
-    checkToggleswitch.addEventListener('change',function(){
-        if (checkToggleswitch.checked){
-            chrome.runtime.sendMessage({activateBackgroundJS: true});
-        }else{
-            chrome.runtime.sendMessage({activateBackgroundJS: false});
-        }
-    });
-    
-    //check for submit button click (submitting new site url to be blocked)
-    inptButton.addEventListener('click',function(){
-        chrome.storage.local.get(["entryText"], (result) => {
-            blocklist = result.entryText
-            //add new entry to list of blocked sites
-            blocklist.push(textinpt.value)
-            chrome.runtime.sendMessage({newEntry: blocklist});
-        });
-        //chrome.runtime.sendMessage({newEntry: textinpt.value})
-        
-    });
-
+    }
 });
