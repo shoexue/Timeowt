@@ -6,7 +6,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         chrome.storage.local.set({ extOn: true }).then(() => {
             console.log("Value is set to " + true);
           });
-    } else {
+    } else if (request.activateBackgroundJS == false) {
         console.log("extension off");
         //if request is to deactivate background, store local data that the extension is off
         chrome.storage.local.set({ extOn: false }).then(() => {
