@@ -8,8 +8,10 @@ body {
 }
 
 .websitebody {
+    font-size: 2vmin;
     width: 97vw;
-    padding: 10px;
+    padding: 5px;
+    text-align: center;
 }
 
 /* Headings */
