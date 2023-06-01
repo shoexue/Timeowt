@@ -1,5 +1,6 @@
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    
+chrome.runtime.onMessage.addListener(function(request) {
+    //listen for incoming messages to execute provided callback function 
+
     if (request.activateBackgroundJS) {
         console.log("extension on");
         //if request is to activate background, store local data that the extension is on
@@ -45,7 +46,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 
 //On switching to a different tab
-chrome.tabs.onActivated.addListener((activeInfo) => {
+chrome.tabs.onActivated.addListener(() => {
     setTimeout(() => {
         //Check to see if extension is on
         chrome.storage.local.get(["extOn"], (result) =>{
@@ -59,15 +60,9 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
                 if (result.extOn==true){
                     chrome.tabs.query({'active': true, 'lastFocusedWindow': true, 'currentWindow': true}, function (tabs) {
                         var url = tabs[0].url;
-                        console.log(url);
-                        var redirect = chrome.runtime.getURL("redirect.html") + '?url=' + encodeURIComponent(url)
-                    
-                        for (let i =0; i < result2.entryText.length; i++) {
-                            if (url.includes(result2.entryText[i])){
-                                chrome.tabs.update(url.id, {url: redirect});
-                                redirect = "";
-                            }
-                        }
+                        
+                        //check through blocklist and redirect user 
+                        blockSite(url,result2.entryText, url.id)
                         
                     });
                 }
@@ -91,18 +86,34 @@ chrome.tabs.onUpdated.addListener((tabId, tab) => {
 
             //If extension on
             if (result.extOn==true){
-                for (var i = 0; i < result2.entryText.length; i++){
-                    if (tab.url.includes(result2.entryText[i])){
-                        var redirect = chrome.runtime.getURL("redirect.html") + '?url=' + encodeURIComponent(tab.url)
-                
-                        if (!tab.url.includes("redirect.html?url=chrome-extension")){
-                        chrome.tabs.update(tabId, {url: redirect});
-                        redirect = "";
-                    }
-                    }
-
-                }
+                //check through blocklist and redirect user 
+                blockSite(tab.url,result2.entryText, tabId)
             }
         });
     });
 });
+
+function blockSite(url,blocklist, tabId){
+    /*Checks through blocklist and redirects user
+    Parameters:
+        url: string 
+        blocklist: string list
+        tabId: int 
+    Returns:
+        None 
+    */
+    for (var i = 0; i < blocklist.length; i++){
+        //check if each site from blocklist is contained within the url 
+        if (url.includes(blocklist[i])){
+            
+            //prevents redirect loop by ending the redirect once the url has already changed 
+            var redirect = chrome.runtime.getURL("redirect.html") + '?url=' + encodeURIComponent(url)
+            
+            if (!url.includes("redirect.html?url=chrome-extension")){
+                chrome.tabs.update(tabId, {url: redirect});
+                redirect = "";
+            }
+        }
+
+    }
+}

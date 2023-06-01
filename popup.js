@@ -71,6 +71,11 @@ document.addEventListener("DOMContentLoaded",
     })
 
     function generateButtons(){
+        /*
+        Generates buttons based on blocklist 
+        Parameters: None
+        Returns: None 
+        */
         buttonContainer.innerHTML = "";
         for (var i = 0; i < blocklist.length; i++) {
             //Create new button element
@@ -79,7 +84,7 @@ document.addEventListener("DOMContentLoaded",
             //Set the button's text
             button.innerHTML = blocklist[i];
             button.className = "button";
-            button.onclick = function(label) {
+            button.onclick = function() {
                 return function() {
                     //on click, send message to background.js to delete site from blocklist + remove button interface from HTML container
                     chrome.runtime.sendMessage({deleteEntry:this.innerHTML});
